@@ -1,13 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, Validator } from '@angular/forms';
+import { NzMessageService } from "ng-zorro-antd/message";
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
-
-class UserRegistrationFormModel {
-  username = "";
-  password = "";
-  confirmPassword = "";
-}
+import { Bad, Ok } from 'src/modules/common/Result';
 
 @Component({
   selector: 'app-user-registration',
@@ -15,31 +11,56 @@ class UserRegistrationFormModel {
   styleUrls: ['./user-registration.component.less']
 })
 export class UserRegistrationComponent implements OnInit {
-  @ViewChild("f")
-  form: NgForm;
-
-  model = new UserRegistrationFormModel();
+  public registerForm: FormGroup;
 
   constructor(
-    private router: Router,
-    private userService: UserService
-  ) { }
+    private _router: Router,
+    private _formBuilder: FormBuilder,
+    private _userService: UserService,
+    private _nzMessageService: NzMessageService,
+  ) {
+    this.registerForm = this._formBuilder.group({
+      username: ["", [Validators.required]],
+      password: ["", [Validators.required]],
+      pwdVal: ["", [Validators.required]]
+    });
+  }
 
   ngOnInit(): void {
   }
 
-  async submit() {
+  async submit(): Promise<void> {
 
-    // TODO  Vérifier que la confirmation de mot de passe correspond au mot de passe
-    if (this.form.form.invalid || this.model.password !== this.model.confirmPassword) {
-      return;
+    // Check form validtion and password consistent
+    if (this.registerForm.valid && this.registerForm.get("password")!.value === this.registerForm.get("pwdVal")!.value) {
+      // Register the user
+      if ((await this.register()).success) {
+        this.goToLogin();
+      } else {
+        this._nzMessageService.error("Une erreur est survenue. Veuillez réessayer plus tard");
+      }
+    } else {
+      this._nzMessageService.error("Formulaire invalide !")
+    }
+  }
+
+  async register(): Promise<Bad<"cant_register"> | Ok>{
+    if (!this.registerForm.valid) {
+      return Bad("cant_register");
     }
 
-    // TODO Enregistrer l'utilisateur via le UserService
-    this.goToLogin();
+    try {
+      const rep = await this._userService.register(
+        this.registerForm.get("username")!.value,
+        this.registerForm.get("password")!.value
+      )
+      return Ok()
+    } catch(e) {
+      return Bad("cant_register")
+    }
   }
 
   goToLogin() {
-    // TODO rediriger l'utilisateur sur "/splash/login"
+    this._router.navigate(["/splash/login"])
   }
 }
