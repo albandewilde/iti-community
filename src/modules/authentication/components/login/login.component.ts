@@ -1,13 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NzMessageService } from "ng-zorro-antd/message";
 import { AuthenticationService } from '../../services/authentication.service';
-
-class LoginFormModel {
-  username = "";
-  password = "";
-}
 
 @Component({
   selector: 'app-login',
@@ -15,22 +10,25 @@ class LoginFormModel {
   styleUrls: ['./login.component.less']
 })
 export class LoginComponent implements OnInit {
-  @ViewChild(NgForm, { static: false })
-  ngForm: NgForm;
-
-  model = new LoginFormModel();
+  public loginForm: FormGroup;
 
   constructor(
-    private router: Router,
-    private authService: AuthenticationService,
-    private nzMessageService: NzMessageService
-  ) { }
+    private _router: Router,
+    private _authService: AuthenticationService,
+    private _nzMessageService: NzMessageService,
+    private _formBuilder: FormBuilder
+  ) { 
+    this.loginForm = this._formBuilder.group({
+      username: ["", [Validators.required]],
+      password: ["", [Validators.required]],
+    });
+  }
 
   ngOnInit(): void {
   }
 
   goToRegistration() {
-    // TODO naviguer vers "/splash/register"
+    this._router.navigate(["/splash/register"])
   }
 
   submit() {
@@ -38,16 +36,19 @@ export class LoginComponent implements OnInit {
   }
 
   async login() {
-    if (this.ngForm.form.invalid) {
+    if (!this.loginForm.valid) {
       return;
     }
 
     try {
-      // TODO vérifier le résultat de l'authentification. Rediriger sur "/" en cas de succès ou afficher une erreur en cas d'échec
-      await this.authService.authenticate(this.model.username, this.model.password);
-
+      const response = await this._authService.authenticate(this.loginForm.get("username")!.value, this.loginForm.get("password")!.value);
+      if( response.success ) {
+        this._router.navigate(["/"]);
+      } else {
+        this._nzMessageService.error("Une erreur est survenue lors de l'authentification !");
+      }
     } catch (e) {
-      this.nzMessageService.error("Une erreur est survenue. Veuillez réessayer plus tard");
+      this._nzMessageService.error("Une erreur est survenue. Veuillez réessayer plus tard");
     }
   }
 }
