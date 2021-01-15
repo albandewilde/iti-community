@@ -19,8 +19,8 @@ export class UserWidgetComponent implements OnInit {
   user$: Observable<User | undefined>;
 
   constructor(
-    private authService: AuthenticationService,
-    private router: Router,
+    private _authService: AuthenticationService,
+    private _router: Router,
     private modalService: NzModalService,
     private userService: UserService,
     private store: UserStore
@@ -32,7 +32,7 @@ export class UserWidgetComponent implements OnInit {
   }
 
   fireToggleNotificaions() {
-      this.toggleNotifications.emit();
+    this.toggleNotifications.emit();
   }
 
   logout() {
@@ -41,7 +41,8 @@ export class UserWidgetComponent implements OnInit {
       nzContent: "Êtes-vous sûr(e) de vouloir déconnecter votre session ?",
       nzOkText: "Déconnexion",
       nzOnOk: () => {
-        // TODO logout puis rediriger vers "/splash/login"
+        this._authService.logout()
+        this._router.navigate(["/splash/login"])
       }
     });
   }
