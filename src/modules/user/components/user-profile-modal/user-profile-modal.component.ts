@@ -3,6 +3,8 @@ import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { User } from '../../user.model';
+import { UserQueries } from '../../services/user.queries';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 export class UserProfileForm {
   id: string;
@@ -11,11 +13,13 @@ export class UserProfileForm {
   _file?: File;
   user: User;
 
-  constructor(user: User) {
-    this.id = user.id;
-    this.username = user.username;
-    this.photoUrl = user.photoUrl;
-    this.user = user;
+  constructor(
+    _user: User
+  ) {
+    this.id = _user.id;
+    this.username = _user.username;
+    this.photoUrl = _user.photoUrl;
+    this.user = _user;
   }
 
   get file() {
@@ -60,23 +64,44 @@ export class UserProfileModalComponent implements OnInit {
   isVisible: boolean = false;
   model: UserProfileForm;
 
-  constructor(private userService: UserService, private sanitizer: DomSanitizer) {
-
+  constructor(
+    private _userService: UserService,
+    private _sanitizer: DomSanitizer,
+    private _userQueries: UserQueries,
+    private _nzMessageService: NzMessageService
+  ) {
   }
 
   ngOnInit(): void {
     this.model = new UserProfileForm(this.user);
   }
 
-  get photoUrl(): SafeResourceUrl {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(this.model.photoUrl || "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/434px-Unknown_person.jpg");
+  get photoUrl(): SafeResourceUrl | undefined {
+    if (this.model.photoUrl) {
+      return this._sanitizer.bypassSecurityTrustResourceUrl(this.model.photoUrl);
+    }
+  }
+
+  async isUsedPseudo(psd: string): Promise<boolean> {
+    return await this._userQueries.exists(psd)
   }
 
   async onOk() {
-    // TODO vérifier si le formulaire est valide
+    const username = this.model.username
+    const pp = this.model.file
 
     if (this.model.hasChanged()) {
-      // TODO mettre à jour l'utilisateur via le service
+      // Unique password
+      if (username != this.user.username && await this.isUsedPseudo(this.model.username)) {
+        this._nzMessageService.error("Ce pseudo est déjà utilisé, veuillez en choisir un autre")
+        return
+      }
+
+      this._userService.update({
+        id: this.user.id,
+        username: username,
+        photo: pp,
+      })
     }
 
     this.close();

@@ -1,8 +1,10 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from 'src/modules/authentication/services/authentication.service';
+import { Bad, Ok } from 'src/modules/common/Result';
 import { UserService } from '../../services/user.service';
 import { User } from '../../user.model';
 import { UserStore } from '../../user.store';
@@ -24,6 +26,7 @@ export class UserWidgetComponent implements OnInit {
   constructor(
     private _authService: AuthenticationService,
     private _router: Router,
+    private _sanitizer: DomSanitizer,
     private modalService: NzModalService,
     private notificationStore: NotificationStore,
     private userService: UserService,
@@ -35,6 +38,11 @@ export class UserWidgetComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.user$.subscribe( user => {
+      if( user?.photoUrl ) {
+        this.photoUrl = this._sanitizer.bypassSecurityTrustResourceUrl(user?.photoUrl);
+      }
+    });
   }
 
   fireToggleNotificaions() {
@@ -46,9 +54,12 @@ export class UserWidgetComponent implements OnInit {
       nzTitle: "Déconnexion",
       nzContent: "Êtes-vous sûr(e) de vouloir déconnecter votre session ?",
       nzOkText: "Déconnexion",
-      nzOnOk: () => {
-        this._authService.logout()
-        this._router.navigate(["/splash/login"])
+      nzOnOk: async () => {
+        await this._authService.logout().then( (resp: Bad<"user_not_authenticated"> | Ok) => {
+          if( resp.success ) {
+            this._router.navigate(['/splash/login']);
+          }
+        });
       }
     });
   }

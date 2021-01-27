@@ -28,8 +28,12 @@ export class RoomCreateModalComponent implements OnInit {
 
   async onOk() {
     if (this.roomFormGroup.valid) {
-      this._roomService.create(this.roomFormGroup.get('roomName')!.value, this.roomFormGroup.get('type')!.value);
-      this.close();
+      this._roomService.create(this.roomFormGroup.get('roomName')!.value, this.roomFormGroup.get('type')!.value).then( (room) => {
+        if( room ) {
+          this._roomService.setShouldFetchRooms( true );
+          this.close();
+        }
+      });
     }
   }
 
