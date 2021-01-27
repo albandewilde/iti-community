@@ -11,11 +11,20 @@ import { LocalAuthenticationCommands } from './services/plateform/local/LocalAut
 import { NzMessageModule } from "ng-zorro-antd/message";
 import { AuthenticationService } from './services/authentication.service';
 import { NzIconModule } from 'ng-zorro-antd/icon';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpAuthenticationCommands } from './services/plateform/http/authentication.commands.http';
+import { AuthenticationInterceptor } from './authentication.interceptor';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @NgModule({
   declarations: [LoginComponent],
   exports: [LoginComponent],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthenticationInterceptor,
+      multi: true
+    },
     {
       provide: AuthenticationCommands,
       useClass: LocalAuthenticationCommands
@@ -25,6 +34,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
     AuthenticationStorage,
   ],
   imports: [
+    HttpClientModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,

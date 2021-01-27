@@ -6,45 +6,38 @@ import { PostLocalStorage } from './post.storage';
 
 @Injectable()
 export class LocalPostCommands extends PostCommands {
-    private storage: PostLocalStorage = new PostLocalStorage();
-    constructor(private userStore: UserStore) {
-        super();
-    }
+  private storage: PostLocalStorage = new PostLocalStorage();
+  constructor(private userStore: UserStore) {
+    super();
+  }
 
-    async create(roomId: string, message: string, file?: File): Promise<{ id: string }> {
-        const posts = this.storage.getValue();
-        posts[roomId] = posts[roomId] || [];
-        const post: PostData = {
-            id: Math.round(Math.random() * 1000).toString(),
-            comments: [],
-            roomId,
-            createdAt: new Date().toISOString(),
-            createdBy: this.userStore.value.user!,
-            liked: false,
-            likes: 0,
-            message
-        }
-        posts[roomId].push(post);
-        this.storage.setValue(posts);
-        return {
-            id: post.id
-        }
+  async create(roomId: string, message: string, file?: File): Promise<PostData> {
+    const posts = this.storage.getValue();
+    posts[roomId] = posts[roomId] || [];
+    const post: PostData = {
+      id: Math.round(Math.random() * 1000).toString(),
+      roomId,
+      createdAt: new Date().toISOString(),
+      createdBy: this.userStore.value.user!,
+      liked: false,
+      likes: 0,
+      message
     }
-
-    comment(postId: string, comment: string): Promise<void> {
-        throw new Error('Method not implemented.');
-    }
+    posts[roomId].push(post);
+    this.storage.setValue(posts);
+    return post;
+  }
 
     async like(roomId: string, postId: string, liked: boolean): Promise<void> {
-        const posts = this.storage.getValue();
-        posts[roomId] = posts[roomId] || [];
-        
-        const post = posts[roomId].find(p => p.id === postId);
-        if(!post) {
-            throw Error("Post not found");
-        }
+    const posts = this.storage.getValue();
+    posts[roomId] = posts[roomId] || [];
 
-        post.liked = liked;
-        this.storage.setValue(posts);
+    const post = posts[roomId].find(p => p.id === postId);
+    if (!post) {
+      throw Error("Post not found");
     }
+
+    post.liked = liked;
+    this.storage.setValue(posts);
+  }
 }

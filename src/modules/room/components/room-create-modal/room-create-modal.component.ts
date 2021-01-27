@@ -5,7 +5,6 @@ import { UserQueries } from 'src/modules/user/services/user.queries';
 import { Room, RoomType } from '../../room.model';
 import { RoomService } from '../../services/room.service';
 import { NotificationSubject } from 'src/modules/notification/notification.model';
-
 @Component({
   selector: 'app-room-create-modal',
   templateUrl: './room-create-modal.component.html',

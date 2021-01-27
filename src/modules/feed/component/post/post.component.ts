@@ -1,7 +1,9 @@
 import { Component, Input, OnInit, AfterViewInit, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import { Post } from '../../post.model';
 import { PostService } from '../../services/post.service';
 import { DateTime } from 'luxon';
+import { UserService } from 'src/modules/user/services/user.service';
 import { UserQueries } from 'src/modules/user/services/user.queries';
 
 @Component({
