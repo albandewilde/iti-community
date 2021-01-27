@@ -24,7 +24,6 @@ import { InputModule } from 'src/modules/input/input.module';
 import { RoomPageComponent } from './pages/room-page/room-page.component';
 import { NotificationModule } from 'src/modules/notification/notification.module';
 import { WebsocketConnection } from 'src/modules/common/WebsocketConnection';
-import { UserNotificationComponent } from '../modules/user/components/user-notification/user-notification.component';
 import { SocketIoWebsocketConnection } from 'src/modules/common/SocketIoWebsocketConnection';
 import { WebSocketTopic } from 'src/modules/common/WebSocketTopic';
 const ws = new SocketIoWebsocketConnection();

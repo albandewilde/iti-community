@@ -40,11 +40,6 @@ export class UserWidgetComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.user$.subscribe( user => { 
-      if( user?.photoUrl ) {
-        this.photoUrl = this._sanitizer.bypassSecurityTrustResourceUrl(user?.photoUrl);
-      }
-    });
   }
 
   fireToggleNotificaions() {

@@ -13,10 +13,8 @@ import { UserWidgetComponent } from './components/user-widget/user-widget.compon
 import { UserProfileModalComponent } from './components/user-profile-modal/user-profile-modal.component';
 import { UserService } from './services/user.service';
 import { UserQueries } from './services/user.queries';
-import { LocalUserQueries } from './services/platform/local/user.queries.local';
 import { UserStore } from './user.store';
 import { UserCommands } from './services/user.commands';
-import { LocalUserCommands } from './services/platform/local/user.commands.local';
 import { UserNotificationComponent } from './components/user-notification/user-notification.component';
 import { HttpUserQueries } from './services/platform/http/user.queries.http';
 import { HttpUserCommands } from './services/platform/http/user.commands.http';
@@ -30,11 +28,11 @@ import { NotificationModule } from '../notification/notification.module';
     UserStore,
     {
       provide: UserQueries,
-      useClass: LocalUserQueries
+      useClass: HttpUserQueries
     },
     {
       provide: UserCommands,
-      useClass: LocalUserCommands
+      useClass: HttpUserCommands
     }
   ],
   imports: [

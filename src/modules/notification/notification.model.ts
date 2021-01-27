@@ -26,6 +26,7 @@ export type PostLikedNotification = AppNotification<'post_liked', {
 }>
 
 export type NewUserNotification = AppNotification<'new_user', {
+  user: User;
   username: string;
 }>;
 

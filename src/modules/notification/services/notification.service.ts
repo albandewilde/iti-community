@@ -1,3 +1,4 @@
+import { not } from "@angular/compiler/src/output/output_ast";
 import { Injectable } from "@angular/core";
 import { NotificationStore } from "../notification.store";
 import { NotificationCommands } from "./notification.commands";
@@ -14,7 +15,8 @@ export class NotificationService {
   }
 
   async fetch() {
-    const notifications = await this.notificationQueries.getNotifications();
+    let notifications = await this.notificationQueries.getNotifications();
+    notifications = notifications.reverse();
     this.store.mutate(s => {
       return {
         ...s,

@@ -3,8 +3,6 @@ import { PostData } from '../post.model';
 @Injectable()
 export abstract class PostCommands {
   abstract create(roomId: string, message: string, file?: File): Promise<PostData>;
-    abstract like(roomId: string, postId: string, liked: boolean): Promise<void>;
-  abstract like(roomId: string, postId: string): Promise<void>;
   abstract comment(postId: string, comment: string): Promise<void>;
-  abstract like(roomId: string, postId: string, liked: boolean): Promise<void>;
+  abstract like(roomId: string, postId: string): Promise<void>;
 }

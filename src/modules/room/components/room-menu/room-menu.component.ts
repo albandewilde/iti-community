@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { last } from 'rxjs/operators';
 import { FeedStore } from 'src/modules/feed/feed.store';
 import { Room } from '../../room.model';
-import { RoomStore } from '../../room.store';
 import { RoomQueries } from '../../services/room.queries';
 import { RoomService } from '../../services/room.service';
 import { RoomSocketService } from '../../services/room.socket.service';
@@ -44,12 +43,6 @@ export class RoomMenuComponent implements OnInit {
     });
 
     let lastRoomId = window.localStorage.getItem( this.lastVisitedRoom );
-    if( lastRoomId ) {
-      this._router.navigate([`/app/${ lastRoomId }`]);
-    }
-  }
-
-  async fetchRooms() {
     if( lastRoomId ) {
       this._router.navigate([`/app/${ lastRoomId }`]);
     }

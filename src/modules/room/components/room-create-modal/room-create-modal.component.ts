@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { NewRoomNotification } from 'src/modules/notification/notification.model';
 import { UserQueries } from 'src/modules/user/services/user.queries';
-import { Room, RoomType } from '../../room.model';
+import { Room } from '../../room.model';
 import { RoomService } from '../../services/room.service';
-import { NotificationSubject } from 'src/modules/notification/notification.model';
+
 @Component({
   selector: 'app-room-create-modal',
   templateUrl: './room-create-modal.component.html',
@@ -24,7 +23,7 @@ export class RoomCreateModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.roomFormGroup = this._formBuilder.group({
-      type: ['libre', [Validators.required]],
+      type: ['text', [Validators.required]],
       roomName: ['', [Validators.required]]
     });
   }
@@ -33,7 +32,6 @@ export class RoomCreateModalComponent implements OnInit {
     if (this.roomFormGroup.valid) {
       this._roomService.create(this.roomFormGroup.get('roomName')!.value, this.roomFormGroup.get('type')!.value).then( (room) => {
         if( room ) {
-          this.sendNotification( room );
           this._roomService.setShouldFetchRooms( true );
           this.close();
         }
@@ -41,16 +39,12 @@ export class RoomCreateModalComponent implements OnInit {
     }
   }
 
-  async sendNotification( room: Room ): Promise<void> {
-    // send NewRoomNotification
-  }
-
   onCancel() {
     this.close();
   }
 
   open() {
-    this.roomFormGroup.reset({ type: 'libre', roomName: '' });
+    this.roomFormGroup.reset({ type: 'text', roomName: '' });
     this.isVisible = true;
   }
 

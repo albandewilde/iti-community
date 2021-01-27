@@ -30,7 +30,7 @@ export class PostService {
         });
     }
 
-    async like(post: Post, liked: boolean) {
-      await this.commands.like( post.roomId, post.id, liked );
+    async like(post: Post) {
+      await this.commands.like( post.roomId, post.id );
     }
 }

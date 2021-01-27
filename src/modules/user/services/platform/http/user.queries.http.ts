@@ -10,6 +10,10 @@ export class HttpUserQueries extends UserQueries {
     super();
   }
 
+  getAllUsers(): Promise<Array<User>> {
+    return this.http.get<Array<User>>(`${environment.serverBaseUrl}/user/users`).toPromise()
+  }
+
   getUserInfo(): Promise<User> {
     return this.http.get<User>(`${environment.serverBaseUrl}/user`).toPromise();
   }
@@ -20,5 +24,9 @@ export class HttpUserQueries extends UserQueries {
 
   exists(username: string): Promise<boolean> {
     return this.http.get<boolean>(`${environment.serverBaseUrl}/user/exists?username=${username}`).toPromise();
+  }
+
+  getUserById( userId: string ): Promise<User> {
+    return this.http.get<User>(`${environment.serverBaseUrl}/user/${userId}`).toPromise();
   }
 }

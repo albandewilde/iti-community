@@ -1,12 +1,11 @@
-<nz-card class="notification-container">
+<nz-card [ngClass]="isNew ? 'notification-container new' : 'notification-container'">
     <div class="main-infos">
         <div class="image-container">
-            <!-- bulle pp user -->
             <img [src]="photo" />
         </div>
         <div class="description">
-            <span>Description de la notification</span>
+            <span>{{ description }}</span>
         </div>
     </div>
-    <div class="date">la date</div>
+    <div class="date">{{ date }}</div>
 </nz-card>

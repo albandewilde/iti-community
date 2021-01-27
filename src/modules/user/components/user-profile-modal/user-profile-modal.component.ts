@@ -101,7 +101,7 @@ export class UserProfileModalComponent implements OnInit {
         id: this.user.id,
         username: username,
         photo: pp,
-      })
+      });
     }
 
     this.close();

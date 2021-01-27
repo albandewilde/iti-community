@@ -6,6 +6,7 @@ import { PostLocalStorage } from './post.storage';
 
 @Injectable()
 export class LocalPostCommands extends PostCommands {
+
   private storage: PostLocalStorage = new PostLocalStorage();
   constructor(private userStore: UserStore) {
     super();
@@ -28,7 +29,7 @@ export class LocalPostCommands extends PostCommands {
     return post;
   }
 
-    async like(roomId: string, postId: string, liked: boolean): Promise<void> {
+  async like(roomId: string, postId: string, liked: boolean): Promise<void> {
     const posts = this.storage.getValue();
     posts[roomId] = posts[roomId] || [];
 
@@ -39,5 +40,9 @@ export class LocalPostCommands extends PostCommands {
 
     post.liked = liked;
     this.storage.setValue(posts);
+  }
+
+  comment(postId: string, comment: string): Promise<void> {
+    throw new Error('Method not implemented.');
   }
 }
