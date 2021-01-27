@@ -1,9 +1,7 @@
 import { Component, Input, OnInit, AfterViewInit, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import { Post } from '../../post.model';
 import { PostService } from '../../services/post.service';
 import { DateTime } from 'luxon';
-import { UserService } from 'src/modules/user/services/user.service';
 import { UserQueries } from 'src/modules/user/services/user.queries';
 
 @Component({
@@ -29,7 +27,7 @@ export class PostComponent implements OnInit, AfterViewInit {
 
   async ngOnInit(): Promise<void> {
     this.postDate = DateTime.fromISO( this.post.createdAt as string ).toLocal().toRelative() as string;
-    this.profilePicture = (await this._userQueries.getUserInfo()).photoUrl;
+    this.profilePicture = (await this._userQueries.getUser( this.post.createdBy.id )).photoUrl;
   }
 
   ngAfterViewInit() {
@@ -39,5 +37,7 @@ export class PostComponent implements OnInit, AfterViewInit {
   async like() {
     this._postService.like( this.post, !this.post.liked );
     this.post.liked = !this.post.liked;
+
+    // TO DO : send PostLikedNotification 
   }
 }

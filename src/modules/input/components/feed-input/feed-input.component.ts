@@ -48,6 +48,8 @@ export class FeedInputComponent {
   chooseMention(user: User) {
     if (this.currentMention) {
       this.message = this.message.substr(0, this.currentMention.index! + 1) + user.username + this.message.substr(this.currentMention.index! + this.currentMention[1].length + 1) + " ";
+
+      // send notification to user.id
     }
     this.hideMentionList();
   }

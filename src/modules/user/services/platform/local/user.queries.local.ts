@@ -26,6 +26,13 @@ export class LocalUserQueries extends UserQueries {
         return user;
     }
 
+    async getUser( userId: string ): Promise<User> {
+        const users = this.storage.getValue();
+        const user = users[userId];
+
+        return user;
+    }
+
     getAllUsers(): Array<User> {
         const users = this.storage.getValue();
         return Object.keys(users)

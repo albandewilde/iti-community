@@ -23,6 +23,7 @@ import { RoomModule } from 'src/modules/room/room.module';
 import { InputModule } from 'src/modules/input/input.module';
 import { RoomPageComponent } from './pages/room-page/room-page.component';
 import { NotificationModule } from 'src/modules/notification/notification.module';
+import { UserNotificationComponent } from '../modules/user/components/user-notification/user-notification.component';
 registerLocaleData(fr);
 
 @NgModule({

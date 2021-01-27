@@ -4,6 +4,7 @@ import { UserRegistrationComponent } from './components/user-registration/user-r
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzCardModule } from 'ng-zorro-antd/card';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { NzModalModule } from 'ng-zorro-antd/modal';
@@ -16,12 +17,13 @@ import { LocalUserQueries } from './services/platform/local/user.queries.local';
 import { UserStore } from './user.store';
 import { UserCommands } from './services/user.commands';
 import { LocalUserCommands } from './services/platform/local/user.commands.local';
+import { UserNotificationComponent } from './components/user-notification/user-notification.component';
 
 
 
 @NgModule({
-  declarations: [UserRegistrationComponent, UserWidgetComponent, UserProfileModalComponent],
-  exports: [UserRegistrationComponent, UserWidgetComponent],
+  declarations: [UserRegistrationComponent, UserWidgetComponent, UserProfileModalComponent, UserNotificationComponent],
+  exports: [UserRegistrationComponent, UserWidgetComponent, UserNotificationComponent],
   providers: [
     UserService,
     UserStore,
@@ -38,6 +40,7 @@ import { LocalUserCommands } from './services/platform/local/user.commands.local
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    NzCardModule,
     NzFormModule,
     NzButtonModule,
     NzIconModule,

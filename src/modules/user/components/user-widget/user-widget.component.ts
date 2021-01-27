@@ -1,11 +1,10 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from 'src/modules/authentication/services/authentication.service';
 import { Bad, Ok } from 'src/modules/common/Result';
-import { UserService } from '../../services/user.service';
 import { User } from '../../user.model';
 import { UserStore } from '../../user.store';
 
@@ -15,9 +14,12 @@ import { UserStore } from '../../user.store';
   styleUrls: ['./user-widget.component.less']
 })
 export class UserWidgetComponent implements OnInit {
+  @Input()
+  hasUnreadNotifs: boolean;
+  
   @Output()
   toggleNotifications: EventEmitter<void> = new EventEmitter();
-
+  
   user$: Observable<User | undefined>;
   photoUrl: SafeResourceUrl;
 
@@ -26,8 +28,7 @@ export class UserWidgetComponent implements OnInit {
     private _router: Router,
     private _sanitizer: DomSanitizer,
     private modalService: NzModalService,
-    private userService: UserService,
-    private store: UserStore
+    private store: UserStore,
   ) {
     this.user$ = store.user$;
   }

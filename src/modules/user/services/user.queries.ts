@@ -5,6 +5,7 @@ import { User, UserRegistration } from '../user.model';
 export abstract class UserQueries {
   abstract getAllUsers(): Array<User>;
   abstract getUserInfo(): Promise<User>;
+  abstract getUser( userId: string ): Promise<User>;
   abstract search(search: string): Promise<User[]>;
   abstract exists(username: string): Promise<boolean>;
 }

@@ -1,4 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { AnyNotification } from 'src/modules/notification/notification.model';
+import { NotificationQueries } from 'src/modules/notification/services/notification.queries';
 
 @Component({
   selector: 'app-app-layout',
@@ -7,15 +9,20 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 })
 export class AppLayoutComponent implements OnInit {
 
-
   showDrawer: boolean = false;
-  constructor() {
+  public notifications: Array<AnyNotification>;
+  public hasUnreadNotification: boolean;
+    
+  constructor(private _notificationQueries: NotificationQueries) {
+    this.notifications = [];
+    this.hasUnreadNotification = false;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.notifications = await this._notificationQueries.getNotifications();
   }
 
   onToggleNotifications() {
-
+    this.showDrawer = !this.showDrawer;
   }
 }
