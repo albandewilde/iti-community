@@ -3,16 +3,17 @@
   <div class="user-widget-actions">
     <button nz-button nzType="default" nzGhost (click)="modal.open()"><i nz-icon nzType="edit"></i></button>
     <!-- Si notifications.length > 0 -->
-    <ng-container *ngIf="hasUnread$ | async">
+    <ng-container *ngIf="hasUnread$ | async; else noNewNotif;">
       <nz-badge nzDot>
         <button nz-button nzType="default" nzGhost (click)="fireToggleNotificaions()"> <i nz-icon nzType="bell"
             nzTheme="outline"></i></button>
       </nz-badge>
     </ng-container>
-    <!-- Sinon -->
-    <button nz-button nzType="default" nzGhost (click)="fireToggleNotificaions()"> 
-      <i nz-icon nzType="bell" nzTheme="outline"></i>
-    </button>
+    <ng-template #noNewNotif>
+      <button nz-button nzType="default" nzGhost (click)="fireToggleNotificaions()"> 
+        <i nz-icon nzType="bell" nzTheme="outline"></i>
+      </button>
+    </ng-template>
     <button nz-button nzType="default" nzDanger nzGhost (click)="logout()"><i nz-icon nzType="logout"></i></button>
   </div>
 </div>
