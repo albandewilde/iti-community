@@ -9,7 +9,6 @@ import { MessageImageElement, MessageYoutubeElement } from '../../../post.model'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PostAttachementYoutubeComponent implements OnInit {
-
   @Input()
   element: MessageYoutubeElement;
 

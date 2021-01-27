@@ -35,7 +35,7 @@ export class LocalPostCommands extends PostCommands {
         throw new Error('Method not implemented.');
     }
 
-    async like(roomId: string, postId: string): Promise<void> {
+    async like(roomId: string, postId: string, liked: boolean): Promise<void> {
         const posts = this.storage.getValue();
         posts[roomId] = posts[roomId] || [];
         
@@ -44,7 +44,7 @@ export class LocalPostCommands extends PostCommands {
             throw Error("Post not found");
         }
 
-        post.liked = true;
+        post.liked = liked;
         this.storage.setValue(posts);
     }
 }

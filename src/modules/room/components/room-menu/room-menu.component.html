@@ -6,12 +6,12 @@
       <i nz-icon nzType="plus"></i>
     </button>
   </div>
-  <div class="menu-item" [ngClass]="{'selected': (roomId$ | async) === '[id de la room]'}">
-    <ng-container *ngFor="let room of rooms">
+  <ng-container *ngFor="let room of rooms">
+    <div class="menu-item" [ngClass]="{'selected': (roomId$ | async) === room.id}">
       <div (click)="goToRoom(room)">
         {{ room.name }}
       </div>
-    </ng-container>
-  </div>
+    </div>
+  </ng-container>
 </div>
 <app-room-create-modal #modal></app-room-create-modal>

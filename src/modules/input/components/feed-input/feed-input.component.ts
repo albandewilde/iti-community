@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild, ViewChildren } from '@angular/core';
 import { NzPopoverComponent, NzPopoverDirective } from 'ng-zorro-antd/popover';
+import { UserQueries } from 'src/modules/user/services/user.queries';
 import { UserService } from 'src/modules/user/services/user.service';
 import { User } from 'src/modules/user/user.model';
 import { MessageSentEventPayload } from '../../input.model';
@@ -32,9 +33,13 @@ export class FeedInputComponent {
 
   supportedTypes = "image/png,image/jpeg,image/gif,image/bmp,image/bmp,video/mpeg,audio/mpeg,audio/x-wav,image/webp";
 
+  private showMentions: boolean;
   constructor(
-    private userService: UserService
-  ) { }
+    private userService: UserService,
+    private _userQueries: UserQueries
+  ) { 
+    this.showMentions = false;
+  }
 
   /**
    * Triggered when the user is selecting a mention in the list.
@@ -46,7 +51,6 @@ export class FeedInputComponent {
     }
     this.hideMentionList();
   }
-
 
   /**
    * Display the mention list
@@ -65,13 +69,38 @@ export class FeedInputComponent {
     this.currentMention = undefined;
   }
 
-
   /**
    * Message change evetn handler
    * @param message
    */
-  onMessageChanged(message: string) {
+  async onMessageChanged(message: string) {
     this.message = message;
+    if( message.length === 0 ) {
+      this.showMentions = false;
+      this.hideMentionList();
+    }
+
+    if( this.showMentions ) {
+      const regex = new RegExp('(?<=[^\w.-]|^)@([A-Za-z]+(?:\.\w+)*)$');      
+      if( !message.includes(' ') ) {
+        if( message.length === 1 ) {
+          this.users = this._userQueries.getAllUsers();
+          this.inputPopover.show();
+        } else {
+          const searchString = message.split('@')[1];
+          this.searchMentionedUsers( searchString );
+          this.showMentionList( this.message.match(regex)! );
+        }
+      } else {
+        const strings = message.split(' @');
+        if( strings ){
+          for( let i = 1; i < strings.length; i++ ) {
+            this.searchMentionedUsers( strings[i] );
+          }
+          this.showMentionList( this.message.match(regex)! );
+        }
+      }
+    }
   }
 
   /**
@@ -102,6 +131,8 @@ export class FeedInputComponent {
       e.stopPropagation();
 
       this.send();
+    } else if( e.key === "@" ) {
+      this.showMentions = true;
     }
   }
 
@@ -115,7 +146,7 @@ export class FeedInputComponent {
 
   async searchMentionedUsers(search: string) {
     if (!search) {
-      this.users = [];
+      this.users = this._userQueries.getAllUsers();
     } else {
       this.users = await this.userService.search(search);
     }
@@ -130,7 +161,7 @@ export class FeedInputComponent {
     }
 
     // TODO émettre  l'évènement "messageSent" via la méthode fireMessageSent
-    // TODO vider la zone de saise avec la méthode clear
+    this.fireMessageSent();
   }
 
   /**
@@ -146,6 +177,12 @@ export class FeedInputComponent {
    */
   fireMessageSent() {
     // TODO émettre l'évènement "messageSent"
+    this.messageSent.emit( {
+      date: new Date(),
+      message: this.message,
+      file: this.file || undefined
+    } );
+    this.clear();
   }
 
   /**
