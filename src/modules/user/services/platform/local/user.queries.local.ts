@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AuthenticationStore } from 'src/modules/authentication/authentication.store';
-import { User } from 'src/modules/user/user.model';
+import { User, UserRegistration } from 'src/modules/user/user.model';
 import { UserQueries } from '../../user.queries';
 import { UserLocalStorage } from './user.storage';
 
@@ -24,6 +24,17 @@ export class LocalUserQueries extends UserQueries {
         }
 
         return user;
+    }
+
+    getAllUsers(): Array<User> {
+        const users = this.storage.getValue();
+        return Object.keys(users)
+            .map(id => {
+                return {
+                    id,
+                    username: users[id].username
+                }
+            });
     }
 
     async search(search: string): Promise<User[]> {
