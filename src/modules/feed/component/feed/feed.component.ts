@@ -32,6 +32,6 @@ export class FeedComponent implements OnInit {
           perPage: 10000
         });
       }
-    })
+    });
   }
 }
