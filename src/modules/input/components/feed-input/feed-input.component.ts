@@ -46,19 +46,12 @@ export class FeedInputComponent {
    * @param user The mentioned user
    */
   chooseMention(user: User) {
-    console.log(this.currentMention)
     if (this.currentMention) {
       this.message = this.message.substr(0, this.currentMention.index! + 1) + user.username + this.message.substr(this.currentMention.index! + this.currentMention[1].length + 1) + " ";
     }
     this.hideMentionList();
   }
 
-// "Bonjour @Test"
-// BTestnjour
-
-
-// onjourTest
-// @t
   /**
    * Display the mention list
    * @param mentionMatch The mention regexp match
@@ -76,7 +69,6 @@ export class FeedInputComponent {
     this.currentMention = undefined;
   }
 
-
   /**
    * Message change evetn handler
    * @param message
@@ -89,30 +81,23 @@ export class FeedInputComponent {
     }
 
     if( this.showMentions ) {
-      
-      // soit "@Arthur"
+      const regex = new RegExp('(?<=[^\w.-]|^)@([A-Za-z]+(?:\.\w+)*)$');      
       if( !message.includes(' ') ) {
-        // message === "@"
         if( message.length === 1 ) {
           this.users = this._userQueries.getAllUsers();
           this.inputPopover.show();
-        // message === "@Arthur"
         } else {
-          const t = new RegExp('/(.*)/gm');
           const searchString = message.split('@')[1];
           this.searchMentionedUsers( searchString );
-          
-          this.showMentionList( t.exec( this.message )! );
+          this.showMentionList( this.message.match(regex)! );
         }
-      // sinon "Bonjour @Arthur"
       } else {
         const strings = message.split(' @');
-  
         if( strings ){
           for( let i = 1; i < strings.length; i++ ) {
             this.searchMentionedUsers( strings[i] );
-            this.showMentionList( new RegExp('/(.*)/gm').exec( strings[i] )! );
           }
+          this.showMentionList( this.message.match(regex)! );
         }
       }
     }
