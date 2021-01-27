@@ -14,18 +14,16 @@ export class PostMapper {
     const audioRegex = /http[s]?:\/\/.+\.(mp3|ogg|wav)/gmi;
     const youtubeRegex = /(http[s]?:\/\/)?www\.(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/gmi;
     const urlRegex = /(https|http)(:\/\/)(\w|\S)*/gm
-    const mentionRegex = /@/gm
+    const mentionRegex = new RegExp('(?<=[^\w.-]|^)@([A-Za-z]+(?:\.\w+)*)$');      
 
     let msgElem: MessageElement | null = null
     let cnt = msg
 
     if (urlRegex.test(msg)) {
       cnt = `<a href=${msg}>${msg}</a>`
-      // Don't break here
     }
     if(mentionRegex.test(msg)) {
       cnt = `<span class="user-mention">${msg}</span>`
-      // Do stuff here
     }
 
     if (pictureRegex.test(msg)) {

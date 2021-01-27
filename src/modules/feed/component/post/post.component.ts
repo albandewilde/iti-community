@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import { Post } from '../../post.model';
 import { PostService } from '../../services/post.service';
@@ -9,7 +9,8 @@ import { UserQueries } from 'src/modules/user/services/user.queries';
 @Component({
   selector: 'app-post',
   templateUrl: './post.component.html',
-  styleUrls: ['./post.component.less']
+  styleUrls: ['./post.component.less'],
+  encapsulation: ViewEncapsulation.None
 })
 export class PostComponent implements OnInit, AfterViewInit {
   @Input()
