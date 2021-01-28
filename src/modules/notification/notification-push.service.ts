@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { RoomQueries } from '../room/services/room.queries';
 import { AnyNotification } from './notification.model';
 
 @Injectable()
@@ -89,6 +88,10 @@ export class NotificationPushService {
       };
       this.create( o.title, option ).subscribe();
     });
+  }
+
+  setShouldHighlight( postId: string ) {
+    this.shouldHighlightPost.next( postId );
   }
 }
 

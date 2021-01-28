@@ -10,6 +10,7 @@ import { NotificationStore } from 'src/modules/notification/notification.store';
 import { NzNotificationService } from 'ng-zorro-antd/notification'
 import { NotificationPushService, PushNotificationOptions } from 'src/modules/notification/notification-push.service';
 import { RoomQueries } from 'src/modules/room/services/room.queries';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-app-layout',
@@ -30,7 +31,8 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
     private _notificationStore: NotificationStore,
     private _nzNotification: NzNotificationService,
     private _notificationPush: NotificationPushService, 
-    private _roomQueries: RoomQueries) {
+    private _roomQueries: RoomQueries,
+    private _router: Router) {
 
     this.hasUnreadNotification = false;
     this._notificationPush.requestPermission();
@@ -113,5 +115,17 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
     if( !this.showDrawer ) {
       this._notificationService.markAsViewed();
     }
+  }
+
+  async goToTarget(notif: AnyNotification) {
+    if( notif.subject === "post_liked" ) {
+      const roomId = await (await this._roomQueries.getRoomIdByPostId( notif.payload.postId )).roomId;
+      this._notificationPush.setShouldHighlight( notif.payload.postId );
+      this._router.navigate(['app', `${roomId}`]);
+    } else if( notif.subject === 'room_added') {
+      this._router.navigate(['app', `${notif.payload.room.id}`]);
+    }
+
+    this.onToggleNotifications();
   }
 }

@@ -1,7 +1,7 @@
 <div class="app-layout">
   <div class="panel-drawer" [ngClass]="{opened: showDrawer}">
     <ng-container *ngFor="let notif of notifications">
-      <app-user-notification [notification]="notif"></app-user-notification>
+      <app-user-notification [notification]="notif" (dblclick)="goToTarget(notif)"></app-user-notification>
     </ng-container>
   </div>
   <div class="app-layout-panel-left">
