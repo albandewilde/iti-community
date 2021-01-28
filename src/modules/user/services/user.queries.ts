@@ -3,7 +3,8 @@ import { User, UserRegistration } from '../user.model';
 
 @Injectable()
 export abstract class UserQueries {
-  abstract getAllUsers(): Array<User>;
+  abstract getAllUsers(): Promise<Array<User>>;
+  abstract getUserById( userId: string ): Promise<User>;
   abstract getUserInfo(): Promise<User>;
   abstract search(search: string): Promise<User[]>;
   abstract exists(username: string): Promise<boolean>;

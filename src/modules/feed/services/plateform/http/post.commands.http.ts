@@ -6,6 +6,7 @@ import { PostCommands } from "../../post.commands";
 
 @Injectable()
 export class HttpPostCommands extends PostCommands {
+
   constructor(private http: HttpClient) {
     super();
   }
@@ -22,5 +23,9 @@ export class HttpPostCommands extends PostCommands {
 
   like(roomId: string, postId: string): Promise<void> {
     return this.http.post<void>(`${environment.serverBaseUrl}/room/${roomId}/post/${postId}/like`, {}).toPromise();
+  }
+
+  comment(postId: string, comment: string): Promise<void> {
+    throw new Error("Method not implemented.");
   }
 }

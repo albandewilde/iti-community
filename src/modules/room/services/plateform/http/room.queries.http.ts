@@ -13,4 +13,8 @@ export class HttpRoomQueries extends RoomQueries {
   getAll(): Promise<Room[]> {
     return this.http.get<Room[]>(`${environment.serverBaseUrl}/room`).toPromise();
   }
+
+  getRoomIdByPostId(postId: string): Promise<{roomId: string}> {
+    return this.http.get<{roomId: string}>(`${environment.serverBaseUrl}/room/${postId}`).toPromise();
+  }
 }

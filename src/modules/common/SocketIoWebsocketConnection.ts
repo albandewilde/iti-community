@@ -19,7 +19,6 @@ export class SocketIoWebsocketConnection extends WebsocketConnection {
 
     socket.on('connect', (s: Socket) => {
       this.socket = socket;
-      console.log(socket.id);
 
       this.events.forEach(([event, args]) => {
         socket.emit(event, ...args);

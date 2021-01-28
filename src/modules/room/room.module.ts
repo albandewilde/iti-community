@@ -9,9 +9,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { RoomCommands } from './services/room.commands';
-import { LocalRoomCommands } from './services/plateform/local/room.commands.local';
 import { RoomQueries } from './services/room.queries';
-import { LocalRoomQueries } from './services/plateform/local/room.queries.local';
 import { RoomStore } from './room.store';
 import { RoomService } from './services/room.service';
 import { RoomComponent } from './components/room/room.component';
@@ -26,11 +24,11 @@ import { RoomSocketService } from './services/room.socket.service';
   exports: [RoomMenuComponent, RoomComponent],
   providers: [{
     provide: RoomCommands,
-    useClass: LocalRoomCommands
+    useClass: HttpRoomCommands
   },
   {
     provide: RoomQueries,
-    useClass: LocalRoomQueries
+    useClass: HttpRoomQueries
   },
     RoomStore,
     RoomService,

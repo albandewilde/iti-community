@@ -1,0 +1,41 @@
+.new {
+    background-color: rgb(15, 177, 15);
+}
+.notification-container {
+    .ant-card-body {
+        padding: 0px;
+        display: flex;
+        flex-direction: column;
+
+        .main-infos {   
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            .image-container {
+                width: 20%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                
+                img {
+                    max-width: 35px;
+                    max-height: 35px;
+                }
+            }
+        
+            .description {
+                width: 80%;
+            }
+        }
+        
+        .date {
+            display: flex;
+            flex-direction: row-reverse;
+            margin-right: 5%;
+            font-style: italic;
+            color: #a8a8a8;
+        }
+    }
+}

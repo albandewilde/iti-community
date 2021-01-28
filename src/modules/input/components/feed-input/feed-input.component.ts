@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild, ViewChildren } from '@angular/core';
-import { NzPopoverComponent, NzPopoverDirective } from 'ng-zorro-antd/popover';
+import { NzPopoverDirective } from 'ng-zorro-antd/popover';
 import { UserQueries } from 'src/modules/user/services/user.queries';
 import { UserService } from 'src/modules/user/services/user.service';
 import { User } from 'src/modules/user/user.model';
@@ -48,6 +48,8 @@ export class FeedInputComponent {
   chooseMention(user: User) {
     if (this.currentMention) {
       this.message = this.message.substr(0, this.currentMention.index! + 1) + user.username + this.message.substr(this.currentMention.index! + this.currentMention[1].length + 1) + " ";
+
+      // send notification to user.id
     }
     this.hideMentionList();
   }
@@ -84,8 +86,9 @@ export class FeedInputComponent {
       const regex = new RegExp('(?<=[^\w.-]|^)@([A-Za-z]+(?:\.\w+)*)$');      
       if( !message.includes(' ') ) {
         if( message.length === 1 ) {
-          this.users = this._userQueries.getAllUsers();
+          this.users = await this._userQueries.getAllUsers();
           this.inputPopover.show();
+          this.showMentionList( this.message.match('(^@)')! );
         } else {
           const searchString = message.split('@')[1];
           this.searchMentionedUsers( searchString );
@@ -146,7 +149,7 @@ export class FeedInputComponent {
 
   async searchMentionedUsers(search: string) {
     if (!search) {
-      this.users = this._userQueries.getAllUsers();
+      this.users = await this._userQueries.getAllUsers();
     } else {
       this.users = await this.userService.search(search);
     }

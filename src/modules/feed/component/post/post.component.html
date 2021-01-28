@@ -1,4 +1,4 @@
-<div class="post">
+<div [class]="shouldHighlight ? 'post highlight' : 'post'">
   <div class="post-author-name">{{ post.createdBy.username }}</div>
 
   <!-- TIPS: [ngStyle]="{'background-image': url(...) }" -->
