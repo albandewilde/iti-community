@@ -8,6 +8,7 @@ import { UserLocalStorage } from './user.storage';
 export class LocalUserQueries extends UserQueries {
 
     private storage: UserLocalStorage = new UserLocalStorage();
+
     constructor(private authStore: AuthenticationStore) {
         super();
     }
@@ -22,8 +23,17 @@ export class LocalUserQueries extends UserQueries {
         if (!user) {
             throw new Error("User not found");
         }
-
         return user;
+    }
+    getAllUsers(): Array<User> {
+        const users = this.storage.getValue();
+        return Object.keys(users)
+        .map(id => {
+            return {
+                id,
+                username: users[id].username
+            }
+        });
     }
 
     getAllUsers(): Array<User> {
@@ -40,17 +50,19 @@ export class LocalUserQueries extends UserQueries {
     async search(search: string): Promise<User[]> {
         const users = this.storage.getValue();
         return Object.keys(users)
-            .map(id => {
-                return {
-                    id,
-                    username: users[id].username
-                }
-            })
-            .filter(user => user.username.toLowerCase().startsWith(search.toLowerCase()));
+        .map(id => {
+            return {
+                id,
+                username: users[id].username
+            }
+        })
+        .filter(user => user.username.toLowerCase().startsWith(search.toLowerCase()));
     }
+
 
     async exists(username: string): Promise<boolean> {
         const users = this.storage.getValue();
         return Object.keys(users).some(id => users[id].username === username);
     }
+
 }

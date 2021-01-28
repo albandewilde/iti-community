@@ -16,7 +16,9 @@ import { PostAttachementAudioComponent } from './component/post-attachements/pos
 import { PostAttachementYoutubeComponent } from './component/post-attachements/post-attachement-youtube/post-attachement-youtube.component';
 import { FeedStore } from './feed.store';
 import { UserModule } from '../user/user.module';
-
+import { HttpPostCommands } from './services/plateform/http/post.commands.http';
+import { HttpPostQueries } from './services/plateform/http/post.queries.http';
+import { FeedSocketService } from './services/feed.socket.service';
 
 @NgModule({
   declarations: [FeedComponent, PostComponent, PostAttachementImageComponent, PostAttachementVideoComponent, PostAttachementAudioComponent, PostAttachementYoutubeComponent],

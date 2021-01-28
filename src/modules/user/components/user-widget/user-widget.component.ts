@@ -8,6 +8,7 @@ import { Bad, Ok } from 'src/modules/common/Result';
 import { UserService } from '../../services/user.service';
 import { User } from '../../user.model';
 import { UserStore } from '../../user.store';
+import { NotificationStore } from 'src/modules/notification/notification.store';
 
 @Component({
   selector: 'app-user-widget',
@@ -19,21 +20,25 @@ export class UserWidgetComponent implements OnInit {
   toggleNotifications: EventEmitter<void> = new EventEmitter();
 
   user$: Observable<User | undefined>;
-  photoUrl: SafeResourceUrl;
+  photoUrl$: Observable<string | undefined>;
+  hasUnread$: Observable<boolean>;
 
   constructor(
     private _authService: AuthenticationService,
     private _router: Router,
     private _sanitizer: DomSanitizer,
     private modalService: NzModalService,
+    private notificationStore: NotificationStore,
     private userService: UserService,
     private store: UserStore
   ) {
     this.user$ = store.user$;
+    this.photoUrl$ = store.get(s => s.user && s.user.photoUrl ? s.user.photoUrl : "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/434px-Unknown_person.jpg");
+    this.hasUnread$ = notificationStore.hasUnread$;
   }
 
   ngOnInit(): void {
-    this.user$.subscribe( user => { 
+    this.user$.subscribe( user => {
       if( user?.photoUrl ) {
         this.photoUrl = this._sanitizer.bypassSecurityTrustResourceUrl(user?.photoUrl);
       }

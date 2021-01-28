@@ -22,11 +22,6 @@ export class RoomComponent implements OnInit {
       return;
     }
     const post = await this.postService.create(this.store.value.roomId, payload.message, payload.file);
-    this.store.mutate(s => {
-      return {
-        ...s,
-        posts: [...s.posts, this.mapper.map(post)]
-      }
-    })
+    this.store.appendPost(this.mapper.map(post));
   }
 }

@@ -7,6 +7,7 @@ import { Room } from '../../room.model';
 import { RoomStore } from '../../room.store';
 import { RoomQueries } from '../../services/room.queries';
 import { RoomService } from '../../services/room.service';
+import { RoomSocketService } from '../../services/room.socket.service';
 import { RoomCreateModalComponent } from '../room-create-modal/room-create-modal.component';
 
 @Component({
@@ -23,11 +24,11 @@ export class RoomMenuComponent implements OnInit {
   rooms: Room[];
 
   constructor(
-    private feedStore: FeedStore, 
-    private queries: RoomQueries, 
-    private _roomService: RoomService, 
-    private _router: Router
-  ) {
+    private feedStore: FeedStore,
+    private queries: RoomQueries,
+    private _roomService: RoomService,
+    private _router: Router,
+    private roomSocketService: RoomSocketService) {
     this.roomId$ = feedStore.roomId$;
     this.rooms = [];
     this.lastVisitedRoom = 'ity.lastVisitedRoom';
