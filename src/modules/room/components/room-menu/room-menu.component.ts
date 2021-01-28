@@ -36,7 +36,7 @@ export class RoomMenuComponent implements OnInit {
 
   async ngOnInit() {
     await this.fetchRooms();
-    
+
     this._roomService.shouldFetchRooms$.subscribe( async ( shouldFetch: boolean ) => {
       if( shouldFetch ) {
         await this.fetchRooms();
